@@ -2,21 +2,24 @@
   <figure :class="[objectFit !== '' ? 'is-' + objectFit : '']" :data-aspect-ratio="aspectRatio">
     <picture v-if="fetchMode === 'srcset'">
       <source :data-srcset="image.webp" type="image/webp">
-      <source :data-srcset="image.opt" type="image/jpg">
-      <img :src="image.placeholder" class="lazyload blur" :data-src="image.opt">
+      <source :data-srcset="image.resize.srcSet" :type="type">
+      <img :src="image.placeholder" class="lazyload blur" :data-src="image.opt" :data-srcset="image.resize.srcSet" v-bind="$attrs">
     </picture>
     <img
       v-else-if="fetchMode === 'img'"
       :src="image.placeholder"
       class="lazyload blur"
       :data-src="image.opt"
+      :data-srcset="image.resize.srcSet
+      v-bind="$attrs"
     >
-    <img v-else class="lazyload" :data-src="dataSrc">
+    <img v-else class="lazyload" :data-src="dataSrc" :data-srcset="image.resize.srcSet" v-bind="$attrs">
   </figure>
 </template>
 
 <script>
 export default {
+  inheritAttrs: false,
   props: {
     aspectRatio: {
       default: "16:9",
@@ -52,8 +55,22 @@ export default {
         placeholder: require(`~/assets/images/${this.dataSrc}?lqip`),
         placeholderBlur: require(`~/assets/images/${this.dataSrc}?lqip`),
         colors: require(`~/assets/images/${this.dataSrc}?lqip-colors`),
-        webp: require(`~/assets/images/${this.dataSrc}?webp`)
+        webp: require(`~/assets/images/${this.dataSrc}?webp`),
+        resize: require(`~/assets/images/${this.dataSrc}?resize`)
       };
+    },
+    type() {
+      if (this.dataSrc.toLowerCase().endsWith('jpg')) {
+        return 'image/jpeg'
+      } else if (this.dataSrc.toLowerCase().endsWith('png')) {
+        return 'image/png'
+      } else if (this.dataSrc.toLowerCase().endsWith('gif')) {
+        return 'image/gif'
+      } else if (this.dataSrc.toLowerCase().endsWith('webp')) {
+        return 'image/webp'
+      }
+
+      throw new Error(`Unsupported image type: ${this.dataSrc}`)
     }
   },
   methods: {

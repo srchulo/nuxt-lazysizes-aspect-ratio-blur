@@ -53,6 +53,11 @@ export default {
   ],
 
   optimizedImages: {
+    imagesName: ({ isDev }) => (isDev ? '[path][name][hash:optimized].[ext]' : 'img/[name]_[contenthash:7].[ext]'),
+    responsive: {
+        sizes: [320, 640, 768, 960, 1024, 1280, 1600, 1920],
+        name: 'img/[name]_[contenthash:7]-[width].[ext]',
+    },
     inlineImageLimit: -1,
     handleImages: ["jpeg", "png", "svg", "webp", "gif"],
     optimizeImages: true,

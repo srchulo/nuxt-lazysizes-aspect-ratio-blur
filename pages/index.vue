@@ -2,7 +2,7 @@
   <div class="container">
     <section class="gallery">
       <div class="col">
-        <LazyImage aspect-ratio="16:9" object-fit="cover" fetchMode="img"/>
+        <LazyImage aspect-ratio="16:9" object-fit="cover" fetchMode="srcset"/>
       </div>
       <div class="col">
         <LazyImage
